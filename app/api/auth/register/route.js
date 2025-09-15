@@ -15,7 +15,7 @@ export async function POST(request) {
   }
   try {
     InsertUserModel.email = email
-    InsertUserModel.position = position
+    InsertUserModel.position = position.toLowerCase()
     InsertUserModel.fullname = fullname
     console.log("UserModel from request:", InsertUserModel) // Debug log
   } catch (error) {
@@ -25,10 +25,9 @@ export async function POST(request) {
   }
   const data = await SignUp(InsertUserModel, password)
   
-  if (data.error) {
-    console.error('Error during SignUp:', data.error) // Debug log
+  if (data.error != null) {
     ResponseModel.status = '500'
-    ResponseModel.message = 'SignUp failed: ' + data.error
+    ResponseModel.message = data.error
     ResponseModel.data = null
     return NextResponse.json(ResponseModel, { status: 500 })
   }
